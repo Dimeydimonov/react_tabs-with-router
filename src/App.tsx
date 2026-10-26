@@ -2,7 +2,14 @@ import 'bulma/css/bulma.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 import './App.scss';
 import React from 'react';
-import { Link, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import {
+  Link,
+  Navigate,
+  Outlet,
+  Route,
+  Routes,
+  useLocation,
+} from 'react-router-dom';
 import { Tabs } from './components/Tabs';
 import { Tab } from './types/Tab';
 
@@ -13,14 +20,6 @@ const tabs: Tab[] = [
 ];
 
 const HomePage = () => <h1 className="title">Home page</h1>;
-
-const TabsPage = () => (
-  <>
-    <h1 className="title">Tabs page</h1>
-
-    <Tabs tabs={tabs} />
-  </>
-);
 
 const NotFoundPage = () => <h1 className="title">Page not found</h1>;
 
@@ -60,8 +59,19 @@ export const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/home" element={<Navigate to="/" replace />} />
-            <Route path="/tabs" element={<TabsPage />} />
-            <Route path="/tabs/:tabId" element={<TabsPage />} />
+            <Route
+              path="/tabs"
+              element={
+                <>
+                  <h1 className="title">Tabs page</h1>
+
+                  <Outlet />
+                </>
+              }
+            >
+              <Route index element={<Tabs tabs={tabs} />} />
+              <Route path=":tabId" element={<Tabs tabs={tabs} />} />
+            </Route>
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>
